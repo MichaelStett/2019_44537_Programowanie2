@@ -27,12 +27,6 @@ namespace MT
 	{
 		namespace Engine
 		{
-			ostream& operator << (ostream& out, const pair<unsigned int, unsigned int>& c)
-			{
-				out << "<" << c.first << "," << c.second << ">";
-				return out;
-			}
-
 			class Game
 			{
 			private:
@@ -47,21 +41,19 @@ namespace MT
 				Game()
 				{
 					auto statsEnemy = vector<int>{ 10, 20, 30, 40 };
-					auto x = new Player();
+					auto x = new Player<>();
 					x->LoadFromFile();
 					entities.push_back(x);
-					entities.push_back(new Enemy(statsEnemy));
+					entities.push_back(new Enemy<>(statsEnemy));
 					
 					cout << "db Size: " << dbContext.Size() << endl;
-
-					dbContext.Set({ 1, 0 }, 0, 5); // on <1,0> for zero change value to 5
 
 					(*entities[0]).SetName() = "Player";
 					(*entities[1]).SetName() = "Enemy";
 
-					dbContext.ViewContext();
+					dbContext.Print();
 					dbContext.LoadFromFile();
-					dbContext.ViewContext();
+					dbContext.Print();
 
 					cout << (*entities[0]).ToString() << endl;
 					cout << (*entities[1]).ToString() << endl;
@@ -80,8 +72,8 @@ namespace MT
 					);
 
 					vector<IEntity*> foo;
-					foo.push_back(new Player());
-					foo.push_back(new Enemy());
+					foo.push_back(new Player<>());
+					foo.push_back(new Enemy<>());
 
 					vector<IEntity*>::iterator it = foo.begin() + 1;
 
@@ -99,11 +91,8 @@ namespace MT
 					}
 					cout << endl;
 
-					//operation((*entities[0]), new Add(3));
-					//operation((*entities[1]), new Add(5));
-
-					cout << "Player: " << (*entities[0]).ToString() << endl;
-					cout << "Enemy: " << (*entities[1]).ToString() << endl;
+					cout << (*entities[0]).ToString() << endl;
+					cout << (*entities[1]).ToString() << endl;
 				}
 
 				void Main()

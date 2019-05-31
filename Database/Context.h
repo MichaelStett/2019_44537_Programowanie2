@@ -22,6 +22,7 @@ using std::cout;
 using std::endl;
 using std::pair;
 using std::vector;
+using std::ostream;
 using std::ifstream;
 using std::copy;
 using std::istream_iterator;
@@ -35,11 +36,17 @@ namespace MT
 	{
 		namespace Database
 		{
+			ostream& operator << (ostream& out, const pair<unsigned int, unsigned int>& c)
+			{
+				out << "<" << c.first << "," << c.second << ">";
+				return out;
+			}
+
 			template <const unsigned int size = 3>
 			class Context
 			{
 			private:
-				vector<vector<Enemy>> matrix;
+				vector<vector<Enemy<>>> matrix;
 				pair<unsigned int, unsigned int> coords;
 				const string ContextFilePath = "Context.xd";
 			public:
@@ -53,15 +60,15 @@ namespace MT
 						matrix[i].resize(size);
 				}
 
-				void ViewContext()
+				void Print()
 				{
 					for (coords.first = 0; coords.first < Size(); coords.first++)
 						for (coords.second = 0; coords.second < Size(); coords.second++)
 						{
-							for (int i = 0; i < 4; i++)
+							for (int i = 0; i < 8; i++)
 							{
 								cout << coords
-									<< " on " << ToString(static_cast<EnemiesValues>(i))
+									<< " on " << ToString(static_cast<Values>(i))
 									<< " = " << Get(coords, i) << endl;
 							}
 						}
@@ -89,12 +96,6 @@ namespace MT
 
 					File.open(ContextFilePath);
 
-					// Print file content
-					/*copy(
-						istream_iterator<string>(File),
-						istream_iterator<string>(),
-						ostream_iterator<string>(cout, " "));*/
-
 					if (File.good())
 					{
 						for (coords.first = 0; coords.first < Size(); coords.first++)
@@ -114,7 +115,8 @@ namespace MT
 										File >> matrix[coords.first][coords.second].Set(index);
 									}
 
-									cout << matrix[coords.first][coords.second].ToString() << endl;
+									cout << coords << matrix[coords.first][coords.second].ToString() << endl;
+
 									index++;
 								}
 							}

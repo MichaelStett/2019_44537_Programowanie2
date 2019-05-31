@@ -9,6 +9,7 @@
 #include <fstream>
 
 #include "..\Models\Entity.h"
+#include "..\Models\IPlayerService.h"
 
 using std::cin;
 using std::cout;
@@ -23,8 +24,9 @@ namespace MT
 	{
 		namespace Models
 		{
+			template <int Tlength = 8>
 			class Player final
-				: public Entity
+				: public Entity, IPlayerService
 			{
 			private:
 				const string SaveFile = "savefile.sav";
@@ -32,22 +34,24 @@ namespace MT
 				explicit Player()
 					: Entity()
 				{
-					_values.resize(_length * 2);
-					
+					_length = Tlength;
+					_values.resize(_length);
+
 					cout << "Constructor Player" << endl;
 				}
 
 				Player(vector<int> tab)
 					: Entity(tab)
 				{
-					_values.resize(_length * 2);
+					_length = Tlength;
+					_values.resize(_length);
 					cout << "Constructor Player parametrized" << endl;
 				}
 
-				string ToString()
+				string ToString() final
 				{
 					string temp;
-					for (int i = _length; i < _length * 2; i++)
+					for (int i = _length; i < _length; i++)
 						temp += to_string((*this)._values[i]) + " ";
 
 					return Entity::ToString() + temp;
@@ -65,6 +69,78 @@ namespace MT
 					return *this;
 				}
 
+				void SelectRace()
+				{
+					int pass{ 0 };
+					do {
+						cout << " 1. " << "Human"
+							<< " 2. " << "Orc"
+							<< " 3. " << "Elf"
+							<< " 4. " << "Dwarf"
+							<< " \n ";
+						cout << "Answer: ";
+						cin >> pass;
+						switch (pass) {
+						case 1:
+							(*this) = Player({ 0, 5, 5, 5, 5, 0, 0 });
+							break;
+						case 2:
+							(*this) = Player({ 0, 10, -5, 10, 0, 0, 0 });
+							break;
+						case 3:
+							(*this) = Player({ 0, 10, 5, -5, 5, 0, 0 });
+							break;
+						case 4:
+							(*this) = Player({ 0, 0, 0, 20, 0, 0, 0 });
+							break;
+						}
+					} while (pass <= 0 || pass > 4);
+				}
+
+				void SelectClass()
+				{
+					int pass{ 0 };
+					do {
+						cout << " 1. " << "Mage"
+							<< " 2. " << "Battlemage"
+							<< " 3. " << "Worrior"
+							<< " 4. " << "Acrobat"
+							<< " 5. " << "Archer"
+							<< " 6. " << "Bard"
+							<< " \n ";
+						cout << " Answer: ";
+						cin >> pass;
+
+						switch (pass) {
+						case 1:
+							(*this) = Player({ 1, 30, 70, 40, 75, 1, 0 });
+							break;
+						case 2:
+							(*this) = Player({ 1, 50, 40, 60, 75, 1, 0 });
+							break;
+						case 3:
+							(*this) = Player({ 1, 70, 0, 70, 60, 1, 0 });
+							break;
+						case 4:
+							(*this) = Player({ 1, 80, 15, 0, 100, 1, 0 });
+							break;
+						case 5:
+							(*this) = Player({ 1, 80, 5, 15, 80, 1, 0 });
+							break;
+						case 6:
+							(*this) = Player({ 1, 80, 20, 20, 80, 2, 0 });
+							break;
+						}
+					} while (pass <= 0 || pass > 6);
+				}
+
+				void SelectName()
+				{
+					cout << " What is your name? ";
+					string pass;
+					cin >> (*this).SetName();
+				}
+
 				bool LoadFromFile() {
 					struct stat buffer;
 					if (stat(SaveFile.c_str(), &buffer) == 0)
@@ -78,26 +154,26 @@ namespace MT
 							cout << " Save sucessfully loaded!";
 							return true;
 						}
-						else 
+						else
 						{
 							cout << " Ok! Sorry to bother";
 							return false;
 						}
 					}
-					else 
+					else
 					{
 						return false;
 					}
 				}
 
-				void LoadCharacter(string SaveFile) 
+				void LoadCharacter(string SaveFile)
 				{
 					ifstream File;
 
 					File.open(SaveFile);
 					int index = -1;
 
-					while (index < 8)
+					while (index < _length)
 					{
 						if (index == -1)
 						{
@@ -111,6 +187,11 @@ namespace MT
 					}
 
 					File.close();
+				}
+
+				unsigned int ValuesLength()
+				{
+					return _length;
 				}
 
 				~Player()

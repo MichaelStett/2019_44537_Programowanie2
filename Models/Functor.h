@@ -22,7 +22,7 @@ namespace MT
 
 				virtual void operator()(IEntity* &obj)
 				{
-					for (unsigned int i = 0; i < (*obj).VectorSize(); i++)
+					for (unsigned int i = 0; i < (*obj).ValuesLength(); i++)
 						(*obj).Set(i) += value;
 				}
 			};
@@ -37,7 +37,7 @@ namespace MT
 
 				virtual void operator()(IEntity* &obj)
 				{
-					for (unsigned int i = 0; i < (*obj).VectorSize(); i++)
+					for (unsigned int i = 0; i < (*obj).ValuesLength(); i++)
 						(*obj).Set(i) -= value;
 				}
 			};

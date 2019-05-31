@@ -4,11 +4,13 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 using std::cout;
 using std::endl;
 
-using std::string;
+using std::string; 
+using std::vector;
 
 namespace MT
 {
@@ -18,9 +20,15 @@ namespace MT
 		{
 			class IEntity
 			{
+			protected:
+				string _name;
+				vector<int> _values;
+				int _length;
 			public:
 				explicit IEntity()
 				{
+					(*this)._name = "Name";
+					(*this)._length = 4;
 					cout << "Constructor IEntity" << endl;
 				}
 
@@ -29,7 +37,7 @@ namespace MT
 				virtual string& SetName() = 0;
 				virtual string GetName() const = 0;
 				virtual string ToString() = 0;
-				virtual unsigned int VectorSize() = 0;
+				virtual unsigned int ValuesLength() = 0;
 
 				virtual ~IEntity()
 				{

@@ -129,6 +129,7 @@
     <ClInclude Include="..\Models\IFunctor.h" />
     <ClInclude Include="..\Models\Functor.h" />
     <ClInclude Include="..\Models\Enum.h" />
+    <ClInclude Include="..\Models\IPlayerService.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

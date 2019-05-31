@@ -27,15 +27,9 @@ namespace MT
 				public IEntity
 			{
 			protected:
-				string _name;
-				vector<int> _values;
-				const int _length = 4;
 			public:
 				explicit Entity()
 				{
-					(*this)._name = "Name";
-					_values.resize(_length);
-
 					cout << "Constructor Entity" << endl;
 				}
 
@@ -46,7 +40,7 @@ namespace MT
 
 					cout << "Constructor Entity parametrized" << endl;
 				}
-	
+
 				virtual ~Entity()
 				{
 					cout << "Destructor Entity" << endl;
@@ -81,16 +75,9 @@ namespace MT
 					return (*this)._name + " " + temp;
 				}
 
-				unsigned int VectorSize()
-				{
-					return _length;
-				}
-
-				Entity& operator=(const Entity&) = delete;
-
 				int& operator[](int index)
 				{
-					assert(0 <= index && _length > index);
+					assert(0 <= index && (*this)._length > index);
 					return _values[index];
 				}
 			};

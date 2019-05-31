@@ -14,25 +14,41 @@ namespace MT
 	{
 		namespace Models
 		{
-			enum EnemiesValues
+			enum Values
 			{
+				Level,
 				Health,
 				Attack,
 				Defense,
-				Level
+				Speed,
+				Gold,
+				Luck,
+				ExpPoints,
+				ExpCap,
 			};
 
-			inline string ToString(EnemiesValues v)
+			inline string ToString(Values v)
 			{
-				switch (v) {
+				switch (v)
+				{
+				case Level:
+					return "Level";
 				case Health:
 					return "Health";
 				case Attack:
 					return "Attack";
 				case Defense:
 					return "Defense";
-				case Level:
-					return "Level";
+				case Speed:
+					return "Speed";
+				case Gold:
+					return "Gold";
+				case Luck:
+					return "Luck";
+				case ExpPoints:
+					return "ExpPoints";
+				case ExpCap:
+					return "ExpCap";
 				default:
 					assert(!"Invalid enum value");
 					break;
