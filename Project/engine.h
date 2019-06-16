@@ -32,67 +32,73 @@ namespace MT
 			private:
 				Context<3> dbContext;
 				vector<IEntity*> entities;
-				int switchChoice;
+				Player<>* player;
+				
 			public:
-				// zrobić że jak player ma levelup to functor zwieksza wartos values przeciwnikow w database
-				//
-				//
-
 				Game()
 				{
-					auto statsEnemy = vector<int>{ 10, 20, 30, 40 };
-					auto x = new Player<>();
-					x->LoadFromFile();
-					entities.push_back(x);
-					entities.push_back(new Enemy<>(statsEnemy));
-					
+					InitializeDatabase();
+					InitializeEntities();
+					InitializePlayer();
+
+					ViewEntities();
+
+					// Adaptor funkcji ???
+					std::for_each(
+						entities.begin(),
+						entities.end(),
+						IEntity::ToString);
+
+					cout << endl;
+				}
+
+				void InitializeDatabase()
+				{
 					cout << "db Size: " << dbContext.Size() << endl;
 
-					(*entities[0]).SetName() = "Player";
-					(*entities[1]).SetName() = "Enemy";
-
-					dbContext.Print();
 					dbContext.LoadFromFile();
-					dbContext.Print();
+				}
 
-					cout << (*entities[0]).ToString() << endl;
-					cout << (*entities[1]).ToString() << endl;
-
+				void ViewEntities()
+				{
+					// Lambda
 					std::for_each(
 						entities.begin(),
 						entities.end(),
-						[this](IEntity* obj) {
-						operation(obj, new Add(5));
-					});
-
-					std::for_each(
-						entities.begin(),
-						entities.end(),
-						Add(5)
+						[](IEntity* e)
+						{
+							cout << (*e).ToString() << endl;
+						}
 					);
-
+				}
+				void InitializeEntities()
+				{
 					vector<IEntity*> foo;
-					foo.push_back(new Player<>());
+					foo.push_back(new Enemy<>());
+					foo.push_back(new Enemy<>());
 					foo.push_back(new Enemy<>());
 
-					vector<IEntity*>::iterator it = foo.begin() + 1;
+					(*foo[0]).SetName() = "Enemy 1";
+					(*foo[1]).SetName() = "Enemy 2";
+					(*foo[2]).SetName() = "Enemy 3";
 
+					// Adaptor iteratorów 
 					std::copy(
 						foo.begin(),
-						foo.end(), 
-						std::back_inserter(entities));
-
-
-					vector<IEntity*>::const_iterator c_it;
-
-					cout << endl;
-					for (c_it = entities.begin(); c_it != entities.end(); c_it++) {
-						cout << (*(*c_it)).ToString() << endl;
+						foo.end(),
+						std::back_inserter(entities)
+					);
+				}
+				
+				void InitializePlayer()
+				{
+					player = new Player<>();
+					if (!(*player).LoadFromFile())
+					{
+						(*player).SelectClass();
+						(*player).SelectRace();
+						(*player).SelectName();
 					}
-					cout << endl;
-
-					cout << (*entities[0]).ToString() << endl;
-					cout << (*entities[1]).ToString() << endl;
 				}
 
 				void Main()
@@ -102,7 +108,7 @@ namespace MT
 					cout << "Arena " << endl;
 					cout << "Market " << endl;
 					cout << "Save&Exit " << endl;
-
+					int switchChoice;
 					cin >> switchChoice;
 					switch (switchChoice)
 					{

@@ -12,39 +12,47 @@ namespace MT
 	{
 		namespace Models
 		{
-			class Add final
-				: public IFunctor
+			namespace Common
 			{
-			private:
-				int value;
-			public:
-				Add(int x = 0) : value{ x } {}
-
-				virtual void operator()(IEntity* &obj)
+				class Add final
+					: public IFunctor
 				{
-					for (unsigned int i = 0; i < (*obj).ValuesLength(); i++)
-						(*obj).Set(i) += value;
-				}
-			};
+				private:
+					int value;
+				public:
+					Add(int x = 0) : value{ x } {}
 
-			class Sub final
-				: public IFunctor
-			{
-			private:
-				int value;
-			public:
-				Sub(int x = 0) : value{ x } {}
+					virtual void operator()(IEntity*& obj)
+					{
+						for (unsigned int i = 0; i < (*obj).ValuesLength(); i++)
+							(*obj).Set(i) += value;
+					}
 
-				virtual void operator()(IEntity* &obj)
+					virtual void operator()(int& v)
+					{
+						v += value;
+					}
+				};
+
+				class Sub final
+					: public IFunctor
 				{
-					for (unsigned int i = 0; i < (*obj).ValuesLength(); i++)
-						(*obj).Set(i) -= value;
-				}
-			};
+				private:
+					int value;
+				public:
+					Sub(int x = 0) : value{ x } {}
 
-			void operation(IEntity* &obj, IFunctor* func)
-			{
-				(*func)(obj);
+					virtual void operator()(IEntity*& obj)
+					{
+						for (unsigned int i = 0; i < (*obj).ValuesLength(); i++)
+							(*obj).Set(i) -= value;
+					}
+
+					virtual void operator()(int& v)
+					{
+						v -= value;
+					}
+				};
 			}
 		}
 	}

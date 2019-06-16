@@ -17,6 +17,7 @@ using std::endl;
 using std::to_string;
 using std::string;
 using std::ifstream;
+using namespace MT::Project::Models::Common;
 
 namespace MT
 {
@@ -57,7 +58,7 @@ namespace MT
 					return Entity::ToString() + temp;
 				}
 
-				Player& operator=(const Player &obj)
+				Player& operator=(const Player& obj)
 				{
 					if (this != &obj)
 					{
@@ -151,12 +152,12 @@ namespace MT
 						if (tolower(choice) == 'y')
 						{
 							LoadCharacter(SaveFile);
-							cout << " Save sucessfully loaded!";
+							cout << " Save sucessfully loaded!" << endl;
 							return true;
 						}
 						else
 						{
-							cout << " Ok! Sorry to bother";
+							cout << " Ok! Sorry to bother" << endl;
 							return false;
 						}
 					}
@@ -194,7 +195,19 @@ namespace MT
 					return _length;
 				}
 
-				~Player()
+				void LevelUp()
+				{
+					// Funktor
+					std::for_each(
+						_values.begin() + 1,
+						_values.end() - 3,
+						Add(5));
+
+					_values[ExpPoints] = 0;
+					_values[ExpCap] *= 1.5;
+				}
+
+					~Player()
 				{
 					cout << "Destructor Player" << endl;
 				}

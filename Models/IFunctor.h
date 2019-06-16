@@ -11,12 +11,16 @@ namespace MT
 	{
 		namespace Models
 		{
-			class IFunctor
+			namespace Common
 			{
-			public:
-				IFunctor() {};
-				virtual void operator()(IEntity* &one) = 0;
-			};
+				class IFunctor
+				{
+				public:
+					IFunctor() {};
+					virtual void operator()(IEntity*& i) = 0;
+					virtual void operator()(int& v) = 0;
+				};
+			}
 		}
 	}
 }

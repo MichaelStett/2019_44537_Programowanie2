@@ -28,6 +28,7 @@ namespace MT
 				explicit Enemy()
 					: Entity()
 				{
+				
 					_length = Tlength;
 					_values.resize(_length);
 					cout << "Constructor Enemy" << endl;

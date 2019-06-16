@@ -54,7 +54,7 @@ namespace MT
 				{
 					if (size <= 1) { assert(!"Wrong size of Database"); }
 					cout << "Constructor Context" << endl;
-
+					
 					matrix.resize(size);
 					for (int i = 0; i < size; i++)
 						matrix[i].resize(size);
@@ -114,11 +114,9 @@ namespace MT
 									{
 										File >> matrix[coords.first][coords.second].Set(index);
 									}
-
-									cout << coords << matrix[coords.first][coords.second].ToString() << endl;
-
 									index++;
 								}
+								cout << coords << matrix[coords.first][coords.second].ToString() << endl;
 							}
 						}
 					}
