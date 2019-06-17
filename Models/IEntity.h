@@ -28,7 +28,7 @@ namespace MT
 				explicit IEntity()
 				{
 					(*this)._name = "Name";
-					(*this)._length = 4;
+					(*this)._length = 5;
 					cout << "Constructor IEntity" << endl;
 				}
 

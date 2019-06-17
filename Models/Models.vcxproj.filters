@@ -36,5 +36,11 @@
     <ClInclude Include="..\Models\IPlayerService.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="IBattleService.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

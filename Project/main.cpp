@@ -6,6 +6,5 @@ int main()
 {
 	new Game();
 
-	system("pause");
 	return 0;
 }

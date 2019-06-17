@@ -3,14 +3,13 @@
 
 #pragma once
 
-#include "..\Models\Functor.h"
 #include "..\Database\Context.h"
+#include "..\Models\Battle.h"
 
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include <iterator>
 
 using std::cin;
 using std::cout;
@@ -37,26 +36,31 @@ namespace MT
 			public:
 				Game()
 				{
-					InitializeDatabase();
-					InitializeEntities();
-					InitializePlayer();
+
+					Initialize(dbContext);
+					Initialize(entities);
+					Initialize(player);
 
 					ViewEntities();
 
+					cout << Battle::CalculateAttack(entities[0], entities[1]) << endl;
+					cout << Battle::CalculateDefense(entities[0], entities[1]) << endl;
+					cout << Battle::CalculateSpeed(entities[0], entities[1]) << endl;
+
 					// Adaptor funkcji ???
-					std::for_each(
+					/*std::for_each(
 						entities.begin(),
 						entities.end(),
-						IEntity::ToString);
+						&IEntity::ToString);*/
 
 					cout << endl;
 				}
 
-				void InitializeDatabase()
+				void Initialize(Context<3> &c)
 				{
-					cout << "db Size: " << dbContext.Size() << endl;
+					cout << "db Size: " << c.Size() << endl;
 
-					dbContext.LoadFromFile();
+					c.LoadFromFile();
 				}
 
 				void ViewEntities()
@@ -71,12 +75,13 @@ namespace MT
 						}
 					);
 				}
-				void InitializeEntities()
+
+				void Initialize(vector<IEntity*> &v)
 				{
 					vector<IEntity*> foo;
-					foo.push_back(new Enemy<>());
-					foo.push_back(new Enemy<>());
-					foo.push_back(new Enemy<>());
+					foo.push_back(new Enemy<>({ 1, 100, 10, 20, 15 }));
+					foo.push_back(new Enemy<>({ 2, 100, 15, 10, 15 }));
+					foo.push_back(new Enemy<>({ 3, 100, 20, 30, 15 }));
 
 					(*foo[0]).SetName() = "Enemy 1";
 					(*foo[1]).SetName() = "Enemy 2";
@@ -86,11 +91,11 @@ namespace MT
 					std::copy(
 						foo.begin(),
 						foo.end(),
-						std::back_inserter(entities)
+						std::back_inserter(v)
 					);
 				}
 				
-				void InitializePlayer()
+				void Initialize(Player<>* &p)
 				{
 					player = new Player<>();
 					if (!(*player).LoadFromFile())

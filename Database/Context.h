@@ -8,8 +8,6 @@
 #include <cassert>
 #include <vector>
 #include <fstream>
-#include <algorithm>
-#include <iterator>
 
 #include "..\Models\IEntity.h"
 #include "..\Models\Enum.h"
@@ -25,8 +23,6 @@ using std::vector;
 using std::ostream;
 using std::ifstream;
 using std::copy;
-using std::istream_iterator;
-using std::ostream_iterator;
 
 using namespace MT::Project::Models;
 

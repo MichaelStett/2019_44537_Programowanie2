@@ -8,8 +8,10 @@
 #include <cassert>
 #include <fstream>
 
+#include "..\Models\Functor.h"
 #include "..\Models\Entity.h"
 #include "..\Models\IPlayerService.h"
+#include "..\Models\IBattleService.h"
 
 using std::cin;
 using std::cout;
@@ -17,6 +19,7 @@ using std::endl;
 using std::to_string;
 using std::string;
 using std::ifstream;
+
 using namespace MT::Project::Models::Common;
 
 namespace MT
@@ -29,7 +32,7 @@ namespace MT
 			class Player final
 				: public Entity, IPlayerService
 			{
-			private:
+			protected:
 				const string SaveFile = "savefile.sav";
 			public:
 				explicit Player()
@@ -207,7 +210,7 @@ namespace MT
 					_values[ExpCap] *= 1.5;
 				}
 
-					~Player()
+				~Player()
 				{
 					cout << "Destructor Player" << endl;
 				}
