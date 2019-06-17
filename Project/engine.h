@@ -32,11 +32,10 @@ namespace MT
 				Context<3> dbContext;
 				vector<IEntity*> entities;
 				Player<>* player;
-				
+
 			public:
 				Game()
 				{
-
 					Initialize(dbContext);
 					Initialize(entities);
 					Initialize(player);
@@ -47,20 +46,48 @@ namespace MT
 					cout << Battle::CalculateDefense(entities[0], entities[1]) << endl;
 					cout << Battle::CalculateSpeed(entities[0], entities[1]) << endl;
 
-					// Adaptor funkcji ???
-					/*std::for_each(
-						entities.begin(),
-						entities.end(),
-						&IEntity::ToString);*/
+					cout << endl;
+
+					Main();
 
 					cout << endl;
 				}
 
-				void Initialize(Context<3> &c)
+				void Initialize(Context<3> & c)
 				{
 					cout << "db Size: " << c.Size() << endl;
 
 					c.LoadFromFile();
+				}
+
+				void Initialize(vector<IEntity*>& v)
+				{
+					vector<IEntity*> foo;
+					foo.push_back(new Enemy<>({ 1, 100, 10, 20, 15 }));
+					foo.push_back(new Enemy<>({ 2, 100, 15, 10, 15 }));
+					foo.push_back(new Enemy<>({ 3, 100, 20, 30, 15 }));
+
+					(*foo[0]).SetName() = "Enemy";
+					(*foo[1]).SetName() = "Enemy";
+					(*foo[2]).SetName() = "Enemy";
+
+					// Adaptor iteratorów 
+					std::copy(
+						foo.begin(),
+						foo.end(),
+						std::back_inserter(v)
+					);
+				}
+
+				void Initialize(Player<>*& p)
+				{
+					player = new Player<>();
+					if (!(*player).LoadFromFile())
+					{
+						(*player).SelectClass();
+						(*player).SelectRace();
+						(*player).SelectName();
+					}
 				}
 
 				void ViewEntities()
@@ -76,36 +103,6 @@ namespace MT
 					);
 				}
 
-				void Initialize(vector<IEntity*> &v)
-				{
-					vector<IEntity*> foo;
-					foo.push_back(new Enemy<>({ 1, 100, 10, 20, 15 }));
-					foo.push_back(new Enemy<>({ 2, 100, 15, 10, 15 }));
-					foo.push_back(new Enemy<>({ 3, 100, 20, 30, 15 }));
-
-					(*foo[0]).SetName() = "Enemy 1";
-					(*foo[1]).SetName() = "Enemy 2";
-					(*foo[2]).SetName() = "Enemy 3";
-
-					// Adaptor iteratorów 
-					std::copy(
-						foo.begin(),
-						foo.end(),
-						std::back_inserter(v)
-					);
-				}
-				
-				void Initialize(Player<>* &p)
-				{
-					player = new Player<>();
-					if (!(*player).LoadFromFile())
-					{
-						(*player).SelectClass();
-						(*player).SelectRace();
-						(*player).SelectName();
-					}
-				}
-
 				void Main()
 				{
 					cout << "Welcome " << endl;
@@ -119,6 +116,7 @@ namespace MT
 					{
 					case 1:
 						cout << "Arena " << endl;
+						Arena(player, entities[0]);
 						break;
 					case 2:
 						cout << "Market " << endl;
@@ -130,6 +128,109 @@ namespace MT
 						cout << "Invalid input" << endl;
 						break;
 					}
+				}
+
+				bool Battle(Player<>* &p, IEntity* &e) {
+					bool Prio = Battle::CalculateSpeed(p, e);
+					int damage;
+	
+					while (true) 
+					{
+						cout << p->ToString() << endl;
+						cout << e->ToString() << endl;
+						if (Prio) {
+							damage =
+							{
+								Battle::CalculateDefense(e, p) - Battle::CalculateAttack(p, e)
+							};
+							
+
+							if (damage <= 0)
+							{
+								damage = 1;
+							}
+							e->Set(Health) -= damage;
+							cout << p->GetName() << " dealt " << damage << endl;
+
+							if (e->Get(Health) <= 0) {
+								return true;
+							}
+
+							damage =
+							{
+								Battle::CalculateDefense(p, e) - Battle::CalculateAttack(e, p)
+							};
+
+							if (damage <= 0)
+							{
+								damage = 1;
+							}
+							p->Set(Health) -= damage;
+							cout << e->GetName() << " dealt " << damage << endl;
+							
+
+							if (p->Get(Health) <= 0) {
+								return false;
+							}
+						}
+						else
+						{
+							damage =
+							{
+								Battle::CalculateDefense(p, e) - Battle::CalculateAttack(e, p)
+							};
+
+							if (damage <= 0)
+							{
+								damage = 1;
+							}
+							p->Set(Health) -= damage;
+							cout << e->GetName() << " dealt " << damage << endl;
+
+							if (p->Get(Health) <= 0) {
+								return false;
+							}
+
+							damage =
+							{
+								Battle::CalculateDefense(e, p) - Battle::CalculateAttack(p, e)
+							};
+
+							if (damage <= 0)
+							{
+								damage = 1;
+							}
+							e->Set(Health) -= damage;
+							cout << p->GetName() << " dealt " << damage << endl;
+
+							if (e->Get(Health) <= 0) {
+								return true;
+							}
+						}
+					}
+				}
+
+				void Arena(Player<>* &p, IEntity* &e)
+				{
+					if (Battle(p, e))
+					{
+						cout << "You won! " << endl;
+						p->Set(Gold) = Battle::CalculateReward(p, e);
+						p->Set(ExpPoints) = Battle::CalculateReward(p, e);
+
+						if (p->Get(ExpPoints) > p->Get(ExpCap))
+						{
+							cout << "You leveled up!" << endl;
+							p->Set(Health) = 100;
+							p->LevelUp();
+						}
+					}
+					else
+					{
+						cout << " You died :( " << endl;
+						system("exit");
+					}
+
 				}
 
 				~Game()

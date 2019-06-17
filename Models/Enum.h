@@ -23,8 +23,8 @@ namespace MT
 					Attack,
 					Defense,
 					Speed,
-					Gold,
 					Luck,
+					Gold,
 					ExpPoints,
 					ExpCap,
 				};

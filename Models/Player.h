@@ -28,7 +28,7 @@ namespace MT
 	{
 		namespace Models
 		{
-			template <int Tlength = 8>
+			template <int Tlength = 9>
 			class Player final
 				: public Entity, IPlayerService
 			{
@@ -38,24 +38,21 @@ namespace MT
 				explicit Player()
 					: Entity()
 				{
-					_length = Tlength;
-					_values.resize(_length);
-
+					_values.resize(Tlength);
 					cout << "Constructor Player" << endl;
 				}
 
 				Player(vector<int> tab)
 					: Entity(tab)
 				{
-					_length = Tlength;
-					_values.resize(_length);
+					_values.resize(Tlength);
 					cout << "Constructor Player parametrized" << endl;
 				}
 
 				string ToString() final
 				{
 					string temp;
-					for (int i = _length; i < _length; i++)
+					for (int i = _length; i < Tlength; i++)
 						temp += to_string((*this)._values[i]) + " ";
 
 					return Entity::ToString() + temp;
@@ -67,7 +64,7 @@ namespace MT
 					{
 						(*this)._name = obj._name;
 
-						for (int i = 0; i < _length; i++)
+						for (int i = 0; i < Tlength; i++)
 							(*this)._values[i] = obj._values[i];
 					}
 					return *this;
@@ -177,7 +174,7 @@ namespace MT
 					File.open(SaveFile);
 					int index = -1;
 
-					while (index < _length)
+					while (index < Tlength)
 					{
 						if (index == -1)
 						{
@@ -190,12 +187,13 @@ namespace MT
 						index++;
 					}
 
+					cout << this->ToString() << endl;
 					File.close();
 				}
 
-				unsigned int ValuesLength()
+				size_t ValuesLength()
 				{
-					return _length;
+					return _values.size();
 				}
 
 				void LevelUp()
@@ -207,7 +205,7 @@ namespace MT
 						Add(5));
 
 					_values[ExpPoints] = 0;
-					_values[ExpCap] *= 1.5;
+					_values[ExpCap] *= 2;
 				}
 
 				~Player()

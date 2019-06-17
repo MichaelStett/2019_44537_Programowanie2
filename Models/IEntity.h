@@ -37,7 +37,7 @@ namespace MT
 				virtual string& SetName() = 0;
 				virtual string GetName() const = 0;
 				virtual string ToString() = 0;
-				virtual unsigned int ValuesLength() = 0;
+				virtual size_t ValuesLength() = 0;
 
 				virtual ~IEntity()
 				{

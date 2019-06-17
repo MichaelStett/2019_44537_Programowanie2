@@ -100,7 +100,7 @@ namespace MT
 							{
 								int index = -1;
 
-								while (index < 4)
+								while (index < 5)
 								{
 									if (index == -1)
 									{

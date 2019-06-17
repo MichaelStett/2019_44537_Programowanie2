@@ -20,7 +20,7 @@ namespace MT
 	{
 		namespace Models
 		{
-			template <int Tlength = 8>
+			template <int Tlength = 5>
 			class Enemy final
 				: public Entity
 			{
@@ -28,18 +28,14 @@ namespace MT
 				explicit Enemy()
 					: Entity()
 				{
-				
-					_length = Tlength;
-					_values.resize(_length);
+					_values.resize(Tlength);
 					cout << "Constructor Enemy" << endl;
 				}
 
 				Enemy(vector<int> tab)
 					: Entity(tab)
 				{
-					_length = Tlength;
-					_values.resize(_length);
-
+					_values.resize(Tlength);
 					cout << "Constructor Enemy parametrized" << endl;
 				}
 
@@ -56,7 +52,7 @@ namespace MT
 				string ToString() final
 				{
 					string temp;
-					for (int i = _length; i < _length; i++)
+					for (int i = _length; i < Tlength; i++)
 						temp += to_string((*this)._values[i]) + " ";
 
 					return Entity::ToString() + temp;
@@ -74,9 +70,9 @@ namespace MT
 					return *this;
 				}
 
-				unsigned int ValuesLength()
+				size_t ValuesLength()
 				{
-					return _length;
+					return _values.size();
 				}
 
 				~Enemy()

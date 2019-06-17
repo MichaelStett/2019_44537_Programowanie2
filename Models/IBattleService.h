@@ -12,12 +12,10 @@ namespace MT
 			class IBattleService
 			{
 			public:
-				virtual int CalculateAttack() = 0;
-				virtual int CalculateDefense() = 0;
-				virtual int CalculateSpeed() = 0;
-
-				// Player only
-				virtual int CalulateReward() = 0;
+				virtual int CalculateAttack(IEntity* o, IEntity* p) = 0;
+				virtual int CalculateDefense(IEntity* o, IEntity* p) = 0;
+				virtual bool CalculateSpeed(IEntity* o, IEntity* p) = 0;
+				virtual int CalulateReward(IEntity* o, IEntity* p) = 0;
 			};
 		}
 	}

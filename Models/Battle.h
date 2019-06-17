@@ -5,7 +5,13 @@
 
 #include "..\Models\IBattleService.h"
 #include "..\Models\IEntity.h"
+#include "..\Models\Player.h"
 #include "..\Models\Enum.h"
+
+#include <iostream>
+#include <vector>
+#include <random>
+using namespace std;
 
 using namespace MT::Project::Models::Common;
 
@@ -19,15 +25,18 @@ namespace MT
 				: public IBattleService
 			{
 			private:
-				int damageFactor;
+				const static int factor = 10;
+
 			public:
-				
-				Battle()
-				{
-					damageFactor = 10;
+				static int GetRandom() {
+					vector<double> range{ {	0.85, 1.2 } };
+					auto RandNumber = mt19937();
+					RandNumber.seed(random_device()());
+					uniform_real_distribution<double> dist_(range.front(), range.back());
+					return static_cast<int>(dist_(RandNumber));
 				}
 
-				static int CalculateAttack(IEntity* o, IEntity* p) 
+				static int CalculateAttack(IEntity* o, IEntity* p)
 				{
 					auto AttackValue = o->Get(Attack) - p->Get(Defense);
 
@@ -36,7 +45,7 @@ namespace MT
 						AttackValue = 1;
 					}
 
-					return AttackValue;
+					return AttackValue * GetRandom();
 				}
 
 				static int CalculateDefense(IEntity* o, IEntity* p)
@@ -48,24 +57,24 @@ namespace MT
 						DefenseValue = 1;
 					}
 
-					return DefenseValue;
+					return DefenseValue * GetRandom();
 				}
 
-				static int CalculateSpeed(IEntity* o, IEntity* p)
+				static bool CalculateSpeed(IEntity* o, IEntity* p)
 				{
-					auto SpeedValue = o->Get(Speed) - p->Get(Speed);
+					return  o->Get(Speed) - p->Get(Speed) > 0;
+				}
 
-					if (SpeedValue <= 0)
+				static int CalculateReward(IEntity* o, IEntity* p)
+				{
+					auto RewardValue = (o->Get(Level) - p->Get(Level)) * factor;
+
+					if (RewardValue <= 0)
 					{
-						SpeedValue = 1;
+						RewardValue = 5 * factor;
 					}
 
-					return SpeedValue;
-				}
-
-				static int CalculateReward()
-				{
-
+					return RewardValue * GetRandom();
 				}
 			};
 		}
