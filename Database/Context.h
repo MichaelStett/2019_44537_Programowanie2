@@ -78,7 +78,7 @@ namespace MT
 
 				void Set(const pair <unsigned int, unsigned int>& coords, unsigned int index, int value)
 				{
-					matrix[coords.first][coords.second].Set(index) = value;
+					matrix[coords.first][coords.second][index] = value;
 				}
 
 				int Get(const pair <unsigned int, unsigned int>& coords, unsigned int index)
@@ -113,7 +113,7 @@ namespace MT
 									}
 									else
 									{
-										File >> matrix[coords.first][coords.second].Set(index);
+										File >> matrix[coords.first][coords.second][index];
 									}
 									index++;
 								}

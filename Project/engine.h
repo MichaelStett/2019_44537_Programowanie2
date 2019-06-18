@@ -85,6 +85,8 @@ namespace MT
 						foo.end(),
 						std::back_inserter(v)
 					);
+
+					foo.clear();
 				}
 
 				void Initialize(Player<>*& p)
