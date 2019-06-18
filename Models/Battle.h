@@ -27,7 +27,6 @@ namespace MT
 			private:
 				const static int factor = 10;
 
-			public:
 				static double GetRandom()
 				{
 					vector<double> range{ {	0.85, 1.2 } };
@@ -36,7 +35,7 @@ namespace MT
 					uniform_real_distribution<double> dist_(range.front(), range.back());
 					return (dist_(RandNumber));
 				}
-
+			public:
 				static int CalculateAttack(IEntity* o, IEntity* p)
 				{
 					auto AttackValue = o->Get(Attack) * factor * GetRandom() / p->Get(Defense);

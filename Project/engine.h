@@ -181,9 +181,9 @@ namespace MT
 						if (Prio) {
 							damage = Battle::CalculateAttack(p, e) - Battle::CalculateDefense(e, p);
 
-							if (damage <= 0)
+							if (damage < 0)
 							{
-								damage = 10 * Battle::GetRandom();
+								damage = 0;
 							}
 							e->Set(Health) -= damage;
 							cout << p->GetName() << " dealt " << damage << endl;
@@ -194,9 +194,9 @@ namespace MT
 
 							damage = Battle::CalculateAttack(e, p) - Battle::CalculateDefense(p, e);
 
-							if (damage <= 0)
+							if (damage < 0)
 							{
-								damage = 10 * Battle::GetRandom();
+								damage = 0;
 							}
 							p->Set(Health) -= damage;
 							cout << e->GetName() << " dealt " << damage << endl;
@@ -210,9 +210,9 @@ namespace MT
 						{
 							damage = Battle::CalculateAttack(e, p) - Battle::CalculateDefense(p, e);
 
-							if (damage <= 0)
+							if (damage < 0)
 							{
-								damage = 10 * Battle::GetRandom();
+								damage = 10;
 							}
 							p->Set(Health) -= damage;
 							cout << e->GetName() << " dealt " << damage << endl;
@@ -223,9 +223,9 @@ namespace MT
 
 							damage = Battle::CalculateAttack(p, e) - Battle::CalculateDefense(e, p);
 
-							if (damage <= 0)
+							if (damage < 0)
 							{
-								damage = 10 * Battle::GetRandom();
+								damage = 0;
 							}
 							e->Set(Health) -= damage;
 							cout << p->GetName() << " dealt " << damage << endl;
@@ -242,7 +242,7 @@ namespace MT
 					if (Battle(p, e))
 					{
 						cout << "You won! " << endl;
-						int reward = Battle::CalculateReward(p, e) * Battle::GetRandom();
+						int reward = Battle::CalculateReward(p, e);
 						cout <<  reward << endl;
 						
 						p->Set(Gold) += reward;
