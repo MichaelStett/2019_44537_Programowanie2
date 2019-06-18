@@ -25,10 +25,11 @@ namespace MT
 				: public IBattleService
 			{
 			private:
-				const static int factor = 10;
+				const static int factor = 25;
 
 			public:
-				static int GetRandom() {
+				static int GetRandom()
+				{
 					vector<double> range{ {	0.85, 1.2 } };
 					auto RandNumber = mt19937();
 					RandNumber.seed(random_device()());
@@ -38,26 +39,26 @@ namespace MT
 
 				static int CalculateAttack(IEntity* o, IEntity* p)
 				{
-					auto AttackValue = o->Get(Attack) - p->Get(Defense);
+					auto AttackValue = o->Get(Attack) * factor * GetRandom() / p->Get(Defense);
 
 					if (AttackValue <= 0)
 					{
-						AttackValue = 1;
+						AttackValue = 10 * GetRandom();
 					}
 
-					return AttackValue * GetRandom();
+					return AttackValue;
 				}
 
 				static int CalculateDefense(IEntity* o, IEntity* p)
 				{
-					auto DefenseValue = o->Get(Defense) - p->Get(Attack);
+					auto DefenseValue = o->Get(Defense) * factor * GetRandom() / p->Get(Attack);
 
 					if (DefenseValue <= 0)
 					{
-						DefenseValue = 1;
+						DefenseValue = 10 * GetRandom();
 					}
 
-					return DefenseValue * GetRandom();
+					return DefenseValue;
 				}
 
 				static bool CalculateSpeed(IEntity* o, IEntity* p)
@@ -67,14 +68,14 @@ namespace MT
 
 				static int CalculateReward(IEntity* o, IEntity* p)
 				{
-					auto RewardValue = (o->Get(Level) - p->Get(Level)) * factor;
+					auto RewardValue = (o->Get(Level) / p->Get(Level)) * factor * GetRandom();
 
 					if (RewardValue <= 0)
 					{
-						RewardValue = 5 * factor;
+						RewardValue = 5 * factor * GetRandom();
 					}
 
-					return RewardValue * GetRandom();
+					return RewardValue;
 				}
 			};
 		}

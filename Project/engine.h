@@ -105,27 +105,58 @@ namespace MT
 
 				void Main()
 				{
-					cout << "Welcome " << endl;
+					do {
+						cout << "---Welcome---" << endl;
 
-					cout << "Arena " << endl;
-					cout << "Market " << endl;
-					cout << "Save&Exit " << endl;
-					int switchChoice;
-					cin >> switchChoice;
-					switch (switchChoice)
+						cout << "1. Arena " << endl;
+						cout << "2. Market " << endl;
+						cout << "3. Save&Exit " << endl;
+						int switchChoice;
+						cin >> switchChoice;
+						switch (switchChoice)
+						{
+						case 1:
+							cout << "Arena " << endl;
+							ChooseOpponent();
+							break;
+						case 2:
+							cout << "Market is currently closed!" << endl;
+							break;
+						case 3:
+							player->SaveCharacter();
+							cout << "Saved! " << endl;
+							system("pause");
+							exit(0);
+							break;
+						default:
+							cout << "Invalid input" << endl;
+							break;
+						}
+					} while (true);
+				}
+
+				void ChooseOpponent()
+				{
+					auto choose = 0;
+
+					cout << "Choose opponent: " << endl;
+					cout << "1. " << entities[0]->ToString() << endl;
+					cout << "2. " << entities[1]->ToString() << endl;
+					cout << "3. " << entities[2]->ToString() << endl;
+					cin >> choose;
+
+					switch (choose)
 					{
 					case 1:
-						cout << "Arena " << endl;
 						Arena(player, entities[0]);
 						break;
 					case 2:
-						cout << "Market " << endl;
+						Arena(player, entities[1]);
 						break;
 					case 3:
-						cout << "Save&Exit " << endl;
+						Arena(player, entities[2]);
 						break;
 					default:
-						cout << "Invalid input" << endl;
 						break;
 					}
 				}
@@ -141,13 +172,13 @@ namespace MT
 						if (Prio) {
 							damage =
 							{
-								Battle::CalculateDefense(e, p) - Battle::CalculateAttack(p, e)
+								Battle::CalculateAttack(p, e) - Battle::CalculateDefense(e, p)
 							};
 							
 
 							if (damage <= 0)
 							{
-								damage = 1;
+								damage = 10 * Battle::GetRandom();
 							}
 							e->Set(Health) -= damage;
 							cout << p->GetName() << " dealt " << damage << endl;
@@ -158,12 +189,12 @@ namespace MT
 
 							damage =
 							{
-								Battle::CalculateDefense(p, e) - Battle::CalculateAttack(e, p)
+								Battle::CalculateAttack(e, p) - Battle::CalculateDefense(p, e)
 							};
 
 							if (damage <= 0)
 							{
-								damage = 1;
+								damage = 10 * Battle::GetRandom();
 							}
 							p->Set(Health) -= damage;
 							cout << e->GetName() << " dealt " << damage << endl;
@@ -177,12 +208,12 @@ namespace MT
 						{
 							damage =
 							{
-								Battle::CalculateDefense(p, e) - Battle::CalculateAttack(e, p)
+								Battle::CalculateAttack(e, p) - Battle::CalculateDefense(p, e)
 							};
 
 							if (damage <= 0)
 							{
-								damage = 1;
+								damage = 10 * Battle::GetRandom();
 							}
 							p->Set(Health) -= damage;
 							cout << e->GetName() << " dealt " << damage << endl;
@@ -193,12 +224,12 @@ namespace MT
 
 							damage =
 							{
-								Battle::CalculateDefense(e, p) - Battle::CalculateAttack(p, e)
+								Battle::CalculateAttack(p, e) - Battle::CalculateDefense(e, p)
 							};
 
 							if (damage <= 0)
 							{
-								damage = 1;
+								damage = 10 * Battle::GetRandom();
 							}
 							e->Set(Health) -= damage;
 							cout << p->GetName() << " dealt " << damage << endl;
