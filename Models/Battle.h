@@ -25,16 +25,16 @@ namespace MT
 				: public IBattleService
 			{
 			private:
-				const static int factor = 25;
+				const static int factor = 10;
 
 			public:
-				static int GetRandom()
+				static double GetRandom()
 				{
 					vector<double> range{ {	0.85, 1.2 } };
 					auto RandNumber = mt19937();
 					RandNumber.seed(random_device()());
 					uniform_real_distribution<double> dist_(range.front(), range.back());
-					return static_cast<int>(dist_(RandNumber));
+					return (dist_(RandNumber));
 				}
 
 				static int CalculateAttack(IEntity* o, IEntity* p)
@@ -46,7 +46,7 @@ namespace MT
 						AttackValue = 10 * GetRandom();
 					}
 
-					return AttackValue;
+					return static_cast<int>(AttackValue);
 				}
 
 				static int CalculateDefense(IEntity* o, IEntity* p)
@@ -58,7 +58,7 @@ namespace MT
 						DefenseValue = 10 * GetRandom();
 					}
 
-					return DefenseValue;
+					return static_cast<int>(DefenseValue);
 				}
 
 				static bool CalculateSpeed(IEntity* o, IEntity* p)
@@ -68,14 +68,14 @@ namespace MT
 
 				static int CalculateReward(IEntity* o, IEntity* p)
 				{
-					auto RewardValue = (o->Get(Level) / p->Get(Level)) * factor * GetRandom();
+					auto RewardValue = (o->Get(Level) + p->Get(Level)) * factor * GetRandom();
 
 					if (RewardValue <= 0)
 					{
 						RewardValue = 5 * factor * GetRandom();
 					}
 
-					return RewardValue;
+					return static_cast<int>(RewardValue);
 				}
 			};
 		}

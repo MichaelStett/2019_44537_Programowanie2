@@ -71,6 +71,11 @@ namespace MT
 					cout << endl;
 				}
 
+				Enemy<> Get(const pair <unsigned int, unsigned int>& coords)
+				{
+					return matrix[coords.first][coords.second];
+				}
+
 				void Set(const pair <unsigned int, unsigned int>& coords, unsigned int index, int value)
 				{
 					matrix[coords.first][coords.second].Set(index) = value;

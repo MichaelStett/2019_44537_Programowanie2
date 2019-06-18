@@ -29,7 +29,8 @@ namespace MT
 			class Game
 			{
 			private:
-				Context<3> dbContext;
+				const static int ContextSize = 3;
+				Context<ContextSize> dbContext;
 				vector<IEntity*> entities;
 				Player<>* player;
 
@@ -37,39 +38,46 @@ namespace MT
 				Game()
 				{
 					Initialize(dbContext);
-					Initialize(entities);
 					Initialize(player);
 
+					GetFromDatabase(entities);
 					ViewEntities();
-
-					cout << Battle::CalculateAttack(entities[0], entities[1]) << endl;
-					cout << Battle::CalculateDefense(entities[0], entities[1]) << endl;
-					cout << Battle::CalculateSpeed(entities[0], entities[1]) << endl;
-
-					cout << endl;
 
 					Main();
 
 					cout << endl;
 				}
 
-				void Initialize(Context<3> & c)
+				void Initialize(Context<> & c)
 				{
 					cout << "db Size: " << c.Size() << endl;
 
 					c.LoadFromFile();
 				}
 
-				void Initialize(vector<IEntity*>& v)
+				void GetFromDatabase(vector<IEntity*>& v)
 				{
 					vector<IEntity*> foo;
-					foo.push_back(new Enemy<>({ 1, 100, 10, 20, 15 }));
-					foo.push_back(new Enemy<>({ 2, 100, 15, 10, 15 }));
-					foo.push_back(new Enemy<>({ 3, 100, 20, 30, 15 }));
+					if (player->Get(Level) <= 3)
+					{
+						foo.push_back(new Enemy<>(dbContext.Get({ 0, 0 })));
+						foo.push_back(new Enemy<>(dbContext.Get({ 0, 1 })));
+						foo.push_back(new Enemy<>(dbContext.Get({ 0, 2 })));
+					}
+					else if (3 > player->Get(Level) && player->Get(Level) <= 6)
+					{
+						foo.push_back(new Enemy<>(dbContext.Get({ 1, 0 })));
+						foo.push_back(new Enemy<>(dbContext.Get({ 1, 1 })));
+						foo.push_back(new Enemy<>(dbContext.Get({ 1, 2 })));
+					}
+					else
+					{
+						foo.push_back(new Enemy<>(dbContext.Get({ 2, 0 })));
+						foo.push_back(new Enemy<>(dbContext.Get({ 2, 1 })));
+						foo.push_back(new Enemy<>(dbContext.Get({ 2, 2 })));
+					}
 
-					(*foo[0]).SetName() = "Enemy";
-					(*foo[1]).SetName() = "Enemy";
-					(*foo[2]).SetName() = "Enemy";
+					v.clear();
 
 					// Adaptor iteratorów 
 					std::copy(
@@ -97,9 +105,9 @@ namespace MT
 						entities.begin(),
 						entities.end(),
 						[](IEntity* e)
-						{
-							cout << (*e).ToString() << endl;
-						}
+					{
+						cout << (*e).ToString() << endl;
+					}
 					);
 				}
 
@@ -107,7 +115,7 @@ namespace MT
 				{
 					do {
 						cout << "---Welcome---" << endl;
-
+						cout << player->ToString() << endl;
 						cout << "1. Arena " << endl;
 						cout << "2. Market " << endl;
 						cout << "3. Save&Exit " << endl;
@@ -159,22 +167,19 @@ namespace MT
 					default:
 						break;
 					}
+					GetFromDatabase(entities); // Updates enemies after win or levelup 
 				}
 
 				bool Battle(Player<>* &p, IEntity* &e) {
 					bool Prio = Battle::CalculateSpeed(p, e);
 					int damage;
-	
-					while (true) 
+
+					while (true)
 					{
 						cout << p->ToString() << endl;
 						cout << e->ToString() << endl;
 						if (Prio) {
-							damage =
-							{
-								Battle::CalculateAttack(p, e) - Battle::CalculateDefense(e, p)
-							};
-							
+							damage = Battle::CalculateAttack(p, e) - Battle::CalculateDefense(e, p);
 
 							if (damage <= 0)
 							{
@@ -187,10 +192,7 @@ namespace MT
 								return true;
 							}
 
-							damage =
-							{
-								Battle::CalculateAttack(e, p) - Battle::CalculateDefense(p, e)
-							};
+							damage = Battle::CalculateAttack(e, p) - Battle::CalculateDefense(p, e);
 
 							if (damage <= 0)
 							{
@@ -198,7 +200,7 @@ namespace MT
 							}
 							p->Set(Health) -= damage;
 							cout << e->GetName() << " dealt " << damage << endl;
-							
+
 
 							if (p->Get(Health) <= 0) {
 								return false;
@@ -206,10 +208,7 @@ namespace MT
 						}
 						else
 						{
-							damage =
-							{
-								Battle::CalculateAttack(e, p) - Battle::CalculateDefense(p, e)
-							};
+							damage = Battle::CalculateAttack(e, p) - Battle::CalculateDefense(p, e);
 
 							if (damage <= 0)
 							{
@@ -222,10 +221,7 @@ namespace MT
 								return false;
 							}
 
-							damage =
-							{
-								Battle::CalculateAttack(p, e) - Battle::CalculateDefense(e, p)
-							};
+							damage = Battle::CalculateAttack(p, e) - Battle::CalculateDefense(e, p);
 
 							if (damage <= 0)
 							{
@@ -246,20 +242,24 @@ namespace MT
 					if (Battle(p, e))
 					{
 						cout << "You won! " << endl;
-						p->Set(Gold) = Battle::CalculateReward(p, e);
-						p->Set(ExpPoints) = Battle::CalculateReward(p, e);
+						int reward = Battle::CalculateReward(p, e) * Battle::GetRandom();
+						cout <<  reward << endl;
+						
+						p->Set(Gold) += reward;
+						p->Set(ExpPoints) += reward;
 
-						if (p->Get(ExpPoints) > p->Get(ExpCap))
+						if (p->Get(ExpPoints) >= p->Get(ExpCap))
 						{
 							cout << "You leveled up!" << endl;
-							p->Set(Health) = 100;
 							p->LevelUp();
 						}
+						p->Set(Health) = 100;
 					}
 					else
 					{
 						cout << " You died :( " << endl;
-						system("exit");
+						system("pause");
+						exit(0);
 					}
 
 				}

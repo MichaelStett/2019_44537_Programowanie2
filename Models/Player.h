@@ -125,7 +125,7 @@ namespace MT
 
 						switch (pass) {
 						case 1:
-							(*this) += Player({ 1, 30, 70, 40, 75, 1, 0 });
+							(*this) += Player({ 1, 30, 70, 40, 75, 1, 0, 0, 150 });
 							break;
 						case 2:
 							(*this) += Player({ 1, 50, 40, 60, 75, 1, 0 });
@@ -228,11 +228,12 @@ namespace MT
 				{
 					// Funktor
 					std::for_each(
-						_values.begin() + 1,
-						_values.end() - 3,
+						_values.begin() + 2,
+						_values.end() - 4,
 						Add(5));
 
-					_values[ExpPoints] = 0;
+					_values[Level] += 1;
+					_values[ExpPoints] = _values[ExpPoints] - _values[ExpCap];
 					_values[ExpCap] *= 2;
 				}
 
