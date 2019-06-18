@@ -53,7 +53,7 @@ namespace MT
 				{
 					string temp;
 					for (int i = _length; i < Tlength; i++)
-						temp += to_string((*this)._values[i]) + " ";
+						temp += to_string((*this)._values[i]) + " | ";
 
 					return Entity::ToString() + temp;
 				}

@@ -104,11 +104,9 @@ namespace MT
 					std::for_each(
 						entities.begin(),
 						entities.end(),
-						[](IEntity* e)
-					{
+						[](IEntity* e) {
 						cout << (*e).ToString() << endl;
-					}
-					);
+					});
 				}
 
 				void Main()

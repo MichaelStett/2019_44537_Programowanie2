@@ -68,11 +68,12 @@ namespace MT
 
 				string ToString() override
 				{
-					string temp = " ";
+					string temp = "| ";
+					temp += (*this)._name + " | ";
 					for (int i = 0; i < _length; i++)
-						temp += to_string((*this)._values[i]) + " ";
+						temp += to_string((*this)._values[i]) + " | ";
 
-					return (*this)._name + " " + temp;
+					return temp;
 				}
 
 				int& operator[](int index)

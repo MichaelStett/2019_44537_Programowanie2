@@ -18,7 +18,7 @@ using std::cout;
 using std::endl;
 using std::to_string;
 using std::string;
-using std::ifstream; 
+using std::ifstream;
 using std::ofstream;
 
 using namespace MT::Project::Models::Common;
@@ -54,7 +54,7 @@ namespace MT
 				{
 					string temp;
 					for (int i = _length; i < Tlength; i++)
-						temp += to_string((*this)._values[i]) + " ";
+						temp += to_string((*this)._values[i]) + " | ";
 
 					return Entity::ToString() + temp;
 				}
@@ -94,16 +94,16 @@ namespace MT
 						cin >> pass;
 						switch (pass) {
 						case 1:
-							(*this) += Player({ 0, 5, 5, 5, 5, 0, 0 });
+							(*this) += Player({ 0, 5, 5, 5, 5 });
 							break;
 						case 2:
-							(*this) += Player({ 0, 10, -5, 10, 0, 0, 0 });
+							(*this) += Player({ 0, 10, -5, 10, 0 });
 							break;
 						case 3:
-							(*this) += Player({ 0, 10, 5, -5, 5, 0, 0 });
+							(*this) += Player({ 0, 10, 5, -5, 5 });
 							break;
 						case 4:
-							(*this) += Player({ 0, 0, 0, 20, 0, 0, 0 });
+							(*this) += Player({ 0, 0, 0, 20, 0 });
 							break;
 						}
 					} while (pass <= 0 || pass > 4);
@@ -128,19 +128,19 @@ namespace MT
 							(*this) += Player({ 1, 30, 70, 40, 75, 1, 0, 0, 150 });
 							break;
 						case 2:
-							(*this) += Player({ 1, 50, 40, 60, 75, 1, 0 });
+							(*this) += Player({ 1, 50, 40, 60, 75, 1, 0, 0, 150 });
 							break;
 						case 3:
-							(*this) += Player({ 1, 70, 0, 70, 60, 1, 0 });
+							(*this) += Player({ 1, 70, 0, 70, 60, 1, 0, 0, 150 });
 							break;
 						case 4:
-							(*this) += Player({ 1, 80, 15, 0, 100, 1, 0 });
+							(*this) += Player({ 1, 80, 15, 0, 100, 1, 0, 0, 150 });
 							break;
 						case 5:
-							(*this) += Player({ 1, 80, 5, 15, 80, 1, 0 });
+							(*this) += Player({ 1, 80, 5, 15, 80, 1, 0, 0, 150 });
 							break;
 						case 6:
-							(*this) += Player({ 1, 80, 20, 20, 80, 2, 0 });
+							(*this) += Player({ 1, 80, 20, 20, 80, 2, 0, 0, 150 });
 							break;
 						}
 					} while (pass <= 0 || pass > 6);
@@ -203,7 +203,7 @@ namespace MT
 
 				void SaveCharacter()
 				{
-					ofstream File{SaveFile};
+					ofstream File{ SaveFile };
 
 					File
 						<< GetName() << " "
@@ -227,6 +227,7 @@ namespace MT
 				void LevelUp()
 				{
 					// Funktor
+					// Attack Defense Speed
 					std::for_each(
 						_values.begin() + 2,
 						_values.end() - 4,
@@ -235,6 +236,11 @@ namespace MT
 					_values[Level] += 1;
 					_values[ExpPoints] = _values[ExpPoints] - _values[ExpCap];
 					_values[ExpCap] *= 2;
+
+					if (_values[Level] % 5 == 0)
+					{
+						_values[Luck] += 1;
+					}
 				}
 
 				~Player()
