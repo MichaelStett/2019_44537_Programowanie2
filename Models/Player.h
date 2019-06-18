@@ -18,7 +18,8 @@ using std::cout;
 using std::endl;
 using std::to_string;
 using std::string;
-using std::ifstream;
+using std::ifstream; 
+using std::ofstream;
 
 using namespace MT::Project::Models::Common;
 
@@ -70,6 +71,16 @@ namespace MT
 					return *this;
 				}
 
+				Player& operator+=(const Player& obj)
+				{
+					if (this != &obj)
+					{
+						for (int i = 0; i < Tlength; i++)
+							(*this)._values[i] += obj._values[i];
+					}
+					return *this;
+				}
+
 				void SelectRace()
 				{
 					int pass{ 0 };
@@ -83,16 +94,16 @@ namespace MT
 						cin >> pass;
 						switch (pass) {
 						case 1:
-							(*this) = Player({ 0, 5, 5, 5, 5, 0, 0 });
+							(*this) += Player({ 0, 5, 5, 5, 5, 0, 0 });
 							break;
 						case 2:
-							(*this) = Player({ 0, 10, -5, 10, 0, 0, 0 });
+							(*this) += Player({ 0, 10, -5, 10, 0, 0, 0 });
 							break;
 						case 3:
-							(*this) = Player({ 0, 10, 5, -5, 5, 0, 0 });
+							(*this) += Player({ 0, 10, 5, -5, 5, 0, 0 });
 							break;
 						case 4:
-							(*this) = Player({ 0, 0, 0, 20, 0, 0, 0 });
+							(*this) += Player({ 0, 0, 0, 20, 0, 0, 0 });
 							break;
 						}
 					} while (pass <= 0 || pass > 4);
@@ -114,22 +125,22 @@ namespace MT
 
 						switch (pass) {
 						case 1:
-							(*this) = Player({ 1, 30, 70, 40, 75, 1, 0 });
+							(*this) += Player({ 1, 30, 70, 40, 75, 1, 0 });
 							break;
 						case 2:
-							(*this) = Player({ 1, 50, 40, 60, 75, 1, 0 });
+							(*this) += Player({ 1, 50, 40, 60, 75, 1, 0 });
 							break;
 						case 3:
-							(*this) = Player({ 1, 70, 0, 70, 60, 1, 0 });
+							(*this) += Player({ 1, 70, 0, 70, 60, 1, 0 });
 							break;
 						case 4:
-							(*this) = Player({ 1, 80, 15, 0, 100, 1, 0 });
+							(*this) += Player({ 1, 80, 15, 0, 100, 1, 0 });
 							break;
 						case 5:
-							(*this) = Player({ 1, 80, 5, 15, 80, 1, 0 });
+							(*this) += Player({ 1, 80, 5, 15, 80, 1, 0 });
 							break;
 						case 6:
-							(*this) = Player({ 1, 80, 20, 20, 80, 2, 0 });
+							(*this) += Player({ 1, 80, 20, 20, 80, 2, 0 });
 							break;
 						}
 					} while (pass <= 0 || pass > 6);
@@ -169,9 +180,8 @@ namespace MT
 
 				void LoadCharacter(string SaveFile)
 				{
-					ifstream File;
+					ifstream File{ SaveFile };
 
-					File.open(SaveFile);
 					int index = -1;
 
 					while (index < Tlength)
@@ -188,6 +198,24 @@ namespace MT
 					}
 
 					cout << this->ToString() << endl;
+					File.close();
+				}
+
+				void SaveCharacter()
+				{
+					ofstream File{SaveFile};
+
+					File
+						<< GetName() << " "
+						<< Get(Level) << " "
+						<< Get(Health) << " "
+						<< Get(Attack) << " "
+						<< Get(Defense) << " "
+						<< Get(Speed) << " "
+						<< Get(Luck) << " "
+						<< Get(Gold) << " "
+						<< Get(ExpPoints) << " "
+						<< Get(ExpCap);
 					File.close();
 				}
 
